@@ -75,6 +75,10 @@ const verifyOtp = asyncHandler(async (req, res) => {
   if (!otpVerification) {
     return res.status(401).json(new ApiError(401, "Invalid or expired Otp"));
   }
+    isUserExist.otp = "";
+    isUserExist.otpVerified = true; 
+    await isUserExist.save({ validateBeforeSave: false });
+
   const accessToken = await isUserExist?.generateAccessToken();
 
   const loggedInUser = await User.findById(isUserExist._id).select(
