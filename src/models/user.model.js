@@ -80,10 +80,11 @@ userSchema.methods.isPasswordCorrect = async function (password) {
 }
 userSchema.methods.isOtpCorrect = function (otp) {
  const verify =  otp === this.otp && Date.now() < this.otpExpiry
- if (verify) {
-    this.otpVerified = true;
-    this.otp = "";
- }
+ if (!verify) {
+    return verify
+}
+     this.otpVerified = true;
+     this.otp = "";
     return verify    
 }
 
