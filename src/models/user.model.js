@@ -18,11 +18,11 @@ const userSchema = new  Schema(
         trim: true, 
         index: true
     },
-    identityNumber:{
-        type: String,
-        required: true,
-        unique: true,
-    },
+    // identityNumber:{
+    //     type: String,
+    //     required: true,
+    //     unique: true,
+    // },
     country:{
         type:String,
          lowercase:true,
@@ -89,7 +89,7 @@ userSchema.methods.generateAccessToken = function () {
         {
             _id:this._id,
             email:this.email,
-            userName:this.username
+            fullName:this.fullName
         },
         process.env.ACCESS_TOKEN_SECRET,
         {

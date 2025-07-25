@@ -3,9 +3,8 @@ import { ApiError } from "../utils/ApiError.js";
 
 
  const validateForm =async (formData ,res) => {
-  const {identityNumber ,email}= formData
-  const newErrors = [];
-  const isUserExist =  await User.findOne({ $or: [{ identityNumber }, { email}]});
+  const {email}= formData
+  const isUserExist =  await User.findOne({email});
 
   if (!formData.fullName) {
     return res.status(400).json( new ApiError(400 ,"Name is required" ))
@@ -18,14 +17,14 @@ import { ApiError } from "../utils/ApiError.js";
   } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
      return res.status(402).json( new ApiError(402 , "Email is invalid"))
   } else if(isUserExist){
-    return res.status(402).json( new ApiError(402, "Email or Identity Number is registered . try Login"))
+    return res.status(402).json( new ApiError(402, "Email is registered . try Login"))
   }
 
-  if (!formData.identityNumber) {
-     return res.status(400).json( new ApiError(400 ,"Identity Number is required" ))
-  } else if (formData.identityNumber.length != 13) {
-     return res.status(402).json( new ApiError(402 , "Identity Number must be 13 characters"))
-  }
+//   if (!formData.identityNumber) {
+//      return res.status(400).json( new ApiError(400 ,"Identity Number is required" ))
+//   } else if (formData.identityNumber.length != 13) {
+//      return res.status(402).json( new ApiError(402 , "Identity Number must be 13 characters"))
+//   }
 
   if (!formData.password) {
      return res.status(400).json( new ApiError(400 ,"Password is required" ))
@@ -44,12 +43,12 @@ import { ApiError } from "../utils/ApiError.js";
 
 const validateLogin = async (body , res)=>{
 
-   const { email, identityNumber, password } = await body;
-     if (!email && !identityNumber) {
-       return res.status(400).json( new ApiError(400, "identityNumber or email is required"))
+   const { email, password } = await body;
+     if (!email ) {
+       return res.status(400).json( new ApiError(400, " email is required"))
      }
 
-   const isUserExist =  await User.findOne({ $or: [{ identityNumber }, { email}]});
+   const isUserExist =  await User.findOne({  email});
    if (!isUserExist) {
        return res.status(402).json( new ApiError(402, "User does not exist. try Register"))
    }

@@ -8,14 +8,13 @@ import { generateRandomNumber } from "../utils/generateRandomNumber.js";
 import { sendEmail } from "../utils/mail.js";
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { fullName, email, identityNumber, password, cPassword } = req.body;
+  const { fullName, email, password, cPassword } = req.body;
   await validateForm(req.body, res);
   const avatar = await validateFileAndUploadOnCloudinary(req.files, "avatar");
 
   let data = {
     fullName,
     avatar: avatar.url,
-    identityNumber,
     email,
     password,
   };
@@ -35,7 +34,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   // check is user created successfully
   const isUserCreated = await User.findById(user._id)?.select(
-    "-password -otp -otpExpiry -isAdmin -otpVerified -isActive"
+    "-password -otp -otpExpiry -isAdmin  -isActive"
   );
 
   if (!isUserCreated) {
@@ -88,7 +87,7 @@ const verifyOtp = asyncHandler(async (req, res) => {
 
 
   const loggedInUser = await User.findById(isUserExist._id).select(
-    "-password -otp -otpExpiry -isAdmin -otpVerified -isActive"
+    "-password -otp -otpExpiry -isAdmin -isActive"
   );
   const data = {
     ...loggedInUser._doc,
@@ -149,7 +148,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const accessToken = await user.generateAccessToken();
 
   const loggedInUser = await User.findById(user._id).select(
-    "-password -otp -otpExpiry -isAdmin -otpVerified -isActive"
+    "-password -otp -otpExpiry -isAdmin -isActive"
   );
 
   if (!loggedInUser) {
