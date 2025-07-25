@@ -52,15 +52,15 @@ const validateLogin = async (body , res)=>{
    if (!isUserExist) {
        return res.status(402).json( new ApiError(402, "User does not exist. try Register"))
    }
-   if (!isUserExist.otpVerified) {
-       return res.status(302).json( new ApiError(302, "Email doesn't verified"))
-   }
-
-    const isPasswordValid = await isUserExist.isPasswordCorrect(password);
+     const isPasswordValid = await isUserExist.isPasswordCorrect(password);
    
      if (!isPasswordValid) {
         return res.status(401).json( new ApiError(401, "Invalid user credentials"));
      }
+     
+   if (!isUserExist.otpVerified) {
+       return res.status(302).json( new ApiError(302, "Email doesn't verified"))
+   }
     return isUserExist;
    
 }
