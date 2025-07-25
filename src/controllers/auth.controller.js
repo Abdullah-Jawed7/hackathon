@@ -70,16 +70,22 @@ const verifyOtp = asyncHandler(async (req, res) => {
     return res.status(404).json(new ApiError(404, "User not found"));
   }
 
+  if (isUserExist.otpVerified) {
+     return res.status(401).json(new ApiError(401, "Email verified!"));
+  }
+
   const otpVerification = await isUserExist?.isOtpCorrect(otp);
 
   if (!otpVerification) {
     return res.status(401).json(new ApiError(401, "Invalid or expired Otp"));
   }
+  const accessToken = await isUserExist?.generateAccessToken();
+
+  
     isUserExist.otp = "";
     isUserExist.otpVerified = true; 
     await isUserExist.save({ validateBeforeSave: false });
 
-  const accessToken = await isUserExist?.generateAccessToken();
 
   const loggedInUser = await User.findById(isUserExist._id).select(
     "-password -otp -otpExpiry -isAdmin -otpVerified -isActive"
