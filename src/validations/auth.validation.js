@@ -59,7 +59,7 @@ const validateLogin = async (body , res)=>{
      }
      
    if (!isUserExist.otpVerified) {
-       return res.status(302).json( new ApiError(302, "Email doesn't verified"))
+       return res.status(302).json( new ApiError(302, "Email doesn't verified"  ,[isUserExist?._id]))
    }
     return isUserExist;
    
