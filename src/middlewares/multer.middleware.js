@@ -1,7 +1,7 @@
 import multer from "multer"
 
 
-const storage = multer.diskStorage({
+const diskStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./public/temp")
   },
@@ -10,4 +10,8 @@ const storage = multer.diskStorage({
   }
 })
 
-export const upload = multer({ storage: storage })
+export const diskUpload = multer({ storage: diskStorage })
+const memoryStorage = multer.memoryStorage();
+export const memoryUpload = multer({ storage: memoryStorage })
+
+   
