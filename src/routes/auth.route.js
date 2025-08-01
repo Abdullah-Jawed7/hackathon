@@ -1,4 +1,4 @@
-import {upload} from "../middlewares/multer.middleware.js"
+import {memoryUpload , diskUpload} from "../middlewares/multer.middleware.js"
 import {verifyJWT} from "../middlewares/auth.middleware.js"
 import {verifyAdmin} from "../middlewares/admin.middleware.js"
 import { Router } from "express"
@@ -7,13 +7,8 @@ import { loginUser, registerUser , sendOtp ,verifyOtp } from "../controllers/aut
 
 
 const authRouter = Router()
-
-authRouter.post("/register" , upload.fields([
-    {
-        name:"avatar",
-        maxCount: 1
-    },
-]) , registerUser)
+// change uploadType as per use 
+authRouter.post("/register" ,memoryUpload.single("avatar") , registerUser)
 authRouter.post("/login" , loginUser)
 authRouter.post("/verifyOtp" , verifyOtp)
 authRouter.get("/sendOtp/:id" , sendOtp)
