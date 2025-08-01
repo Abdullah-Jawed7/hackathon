@@ -3,14 +3,14 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
 import { validateForm, validateLogin } from "../validations/auth.validation.js";
-import { validateFileAndUploadOnCloudinary } from "../validations/file.validation.js";
+import { validateSingleFileAndUploadOnCLoudinary } from "../validations/file.validation.js";
 import { generateRandomNumber } from "../utils/generateRandomNumber.js";
 import { sendEmail } from "../utils/mail.js";
 
 const registerUser = asyncHandler(async (req, res) => {
   const { fullName, email, password, cPassword } = req.body;
   await validateForm(req.body, res);
-  const avatar = await validateFileAndUploadOnCloudinary(req.files, "avatar");
+  const avatar = await validateSingleFileAndUploadOnCLoudinary(req.file)
 
   let data = {
     fullName,
